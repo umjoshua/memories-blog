@@ -2,16 +2,25 @@ import express from "express";
 import mongoose, { mongo } from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express()
-const DB_USER = process.env.MONGO_USER; 
-const DB_PWD = process.env.MONGODB_URL;
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
-const MONGODB_URL = `mongodb+srv://${DB_USER}:${DB_PWD}@cluster0.zevvmfz.mongodb.net/?retryWrites=true&w=majority`;
+const MONGODB_URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@cluster0.zevvmfz.mongodb.net/MernBlogApp?retryWrites=true&w=majority`;
+
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended:true }));
 app.use(cors())
 
-mongoose.connect(MONGODB_URL)
+mongoose.set('strictQuery',true);
+mongoose.connect(MONGODB_URL,{useNewUrlParser: true}).then(()=>{
+    app.listen(PORT, ()=>{
+        console.log("Listening")
+    })
+}).catch((e)=>{
+    console.log(e.message)
+})
