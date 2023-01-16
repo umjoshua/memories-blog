@@ -1,18 +1,37 @@
 import React, { useState } from 'react'
 import CreateIcon from '@mui/icons-material/Create';
-import FileBase64 from 'react-file-base64';
+import FileBase from 'react-file-base64';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { Posts as PostAction } from '../../features/posts';
+import { useSelector } from 'react-redux';
 
 function Form() {
+    const url = "http://localhost:5000/posts/createPost"
 
-    const [post, setPost] = useState({ creator: '', title: '', message: '', tags: '' });
+    const PostData = useSelector((state) => state.post.value);
 
-    const handleSubmit = () => {
+    const [post, setPost] = useState({ creator: '', title: '', message: '', tags: '', file: '' });
+    const dispatch = useDispatch();
+
+    const postdata = async () => {
+        try {
+            const { data } = await axios.post(url, post).then((response) => response.data);
+            dispatch(PostAction(...PostData, data))
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
         console.log(post);
+        postdata();
         clearSubmit();
     }
 
     const clearSubmit = () => {
-        setPost({ creator: '', title: '', message: '', tags: '' })
+        setPost({ creator: '', title: '', message: '', tags: '', file: '' })
         console.log('clear')
     }
 
@@ -56,9 +75,9 @@ function Form() {
                     </input>
                 </div>
                 <div className='p-1'>
-                    <span>Photo:</span>
+                    <span >Photo:</span>
                     <br></br>
-                    <input type="file"></input>
+                    <FileBase type="file" multiple={false} onDone={({ base64 }) => setPost({ ...post, file: base64 })} />
                 </div>
                 <div className='p-2'>
                     <button className='bg-teal-300 p-1 h-min m-[20px] w-[100px] rounded-md'
