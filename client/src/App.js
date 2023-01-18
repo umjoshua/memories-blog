@@ -18,7 +18,7 @@ function App() {
   }
 
   useEffect(() => {
-    async function fetchPost (){
+    async function fetchPost() {
       const data = await fetchposts();
       dispatch(PostsAction(data));
     }
@@ -29,8 +29,12 @@ function App() {
     <div className='flex flex-col'>
       <Appbar />
       <div className='flex flex-row justify-evenly'>
-        <Posts />
-        <Form />
+        <div className='mt-[10px]'>
+          <Posts />
+        </div>
+        <div className='mt-[10px]'>
+          <Form />
+        </div>
       </div>
     </div>
   )

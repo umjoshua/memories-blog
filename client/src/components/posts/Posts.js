@@ -1,16 +1,15 @@
 import React from 'react'
 import Post from './post/Post'
 import { useSelector } from 'react-redux'
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Posts() {
-    const posts = useSelector((state) => state.post)
-    console.log(posts.value);
+    const data = useSelector((state) => state.post);
+    const posts = data.value;
     return (
-        <div>
-            <h2>POSTS</h2>
-            <Post />
-            <Post />
-        </div>
+        !posts.length ? <CircularProgress /> : (<div className='flex flex-wrap m-4'>
+            {posts.map((item) => { return <Post item={item} /> })}
+        </div>)
     )
 }
 

@@ -36,7 +36,7 @@ function Form() {
     }
 
     return (
-        <div className='shadow-md p-2 rounded-md m-2 items-center justify-center'>
+        <div className='shadow-md p-2 rounded-md m-5 items-center justify-center'>
             <div className='flex flex-row justify-center p-2 items-center'>
                 <h2>Create a Memory</h2>
                 <CreateIcon />
@@ -79,7 +79,7 @@ function Form() {
                     <br></br>
                     <FileBase type="file" multiple={false} onDone={({ base64 }) => setPost({ ...post, file: base64 })} />
                 </div>
-                <div className='p-2'>
+                <div className=''>
                     <button className='bg-teal-300 p-1 h-min m-[20px] w-[100px] rounded-md'
                         onClick={clearSubmit}
                     >Clear</button>
