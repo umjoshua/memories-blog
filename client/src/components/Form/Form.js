@@ -7,7 +7,7 @@ import { Posts } from '../../features/posts';
 import { useSelector } from 'react-redux';
 
 function Form({ currentId, setcurrentId }) {
-    const url = "http://localhost:5000/posts/createPost";
+    const url = "http://localhost:5000/posts/";
 
     const PostData = useSelector((state) => state.post.value);
     const editPost = useSelector((state) => (currentId ? state.post.value.find((message) => message._id === currentId) : null));
@@ -19,11 +19,21 @@ function Form({ currentId, setcurrentId }) {
     }, [editPost])
 
     const postdata = async () => {
-        try {
-            const data = await axios.post(url, post).then((response) => response.data);
-            dispatch(Posts([ ...PostData, data ]))
-        } catch (error) {
-            console.log(error.message)
+        if (currentId) {
+            try {
+                const data = await axios.patch(url + currentId, post).then((response) => response.data);
+                dispatch(Posts(PostData.map((msg)=>(msg._id === currentId ? data: msg))));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else {
+            try {
+                const data = await axios.post(url + 'createPost', post).then((response) => response.data);
+                dispatch(Posts([...PostData, data]))
+            } catch (error) {
+                console.log(error.message)
+            }
         }
     }
 
