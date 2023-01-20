@@ -23,7 +23,7 @@ function App() {
       dispatch(PostsAction(data));
     }
     fetchPost();
-  }, [dispatch])
+  }, [dispatch,currentId])
 
   return (
     <div className='flex flex-col'>

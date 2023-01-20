@@ -3,7 +3,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import FileBase from 'react-file-base64';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { Posts as PostAction } from '../../features/posts';
+import { Posts } from '../../features/posts';
 import { useSelector } from 'react-redux';
 
 function Form({ currentId, setcurrentId }) {
@@ -20,8 +20,8 @@ function Form({ currentId, setcurrentId }) {
 
     const postdata = async () => {
         try {
-            const { data } = await axios.post(url, post).then((response) => response.data);
-            dispatch(PostAction(...PostData, data))
+            const data = await axios.post(url, post).then((response) => response.data);
+            dispatch(Posts([ ...PostData, data ]))
         } catch (error) {
             console.log(error.message)
         }
@@ -36,7 +36,6 @@ function Form({ currentId, setcurrentId }) {
 
     const clearSubmit = () => {
         setPost({ creator: '', title: '', message: '', tags: '', file: '' })
-        console.log('clear');
         setcurrentId(null);
     }
 
