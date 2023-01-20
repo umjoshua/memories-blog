@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Appbar from './components/Appbar/Appbar'
 import Posts from './components/posts/Posts'
 import Form from './components/Form/Form'
@@ -7,7 +7,7 @@ import { Posts as PostsAction } from './features/posts';
 import axios from 'axios';
 
 function App() {
-
+  const [currentId, setcurrentId] = useState(null);
   const url = "http://localhost:5000/posts";
 
   const dispatch = useDispatch();
@@ -23,17 +23,17 @@ function App() {
       dispatch(PostsAction(data));
     }
     fetchPost();
-  }, [])
+  }, [dispatch])
 
   return (
     <div className='flex flex-col'>
       <Appbar />
       <div className='flex flex-row justify-evenly'>
         <div className='mt-[10px]'>
-          <Posts />
+          <Posts setcurrentId={setcurrentId} currentId={currentId} />
         </div>
         <div className='mt-[10px]'>
-          <Form />
+          <Form currentId={currentId} setcurrentId={setcurrentId} />
         </div>
       </div>
     </div>

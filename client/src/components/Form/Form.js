@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CreateIcon from '@mui/icons-material/Create';
 import FileBase from 'react-file-base64';
 import axios from 'axios';
@@ -6,13 +6,17 @@ import { useDispatch } from 'react-redux';
 import { Posts as PostAction } from '../../features/posts';
 import { useSelector } from 'react-redux';
 
-function Form() {
-    const url = "http://localhost:5000/posts/createPost"
+function Form({ currentId, setcurrentId }) {
+    const url = "http://localhost:5000/posts/createPost";
 
     const PostData = useSelector((state) => state.post.value);
-
+    const editPost = useSelector((state) => (currentId ? state.post.value.find((message) => message._id === currentId) : null));
     const [post, setPost] = useState({ creator: '', title: '', message: '', tags: '', file: '' });
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (editPost) setPost(editPost);
+    }, [editPost])
 
     const postdata = async () => {
         try {
@@ -32,13 +36,14 @@ function Form() {
 
     const clearSubmit = () => {
         setPost({ creator: '', title: '', message: '', tags: '', file: '' })
-        console.log('clear')
+        console.log('clear');
+        setcurrentId(null);
     }
 
     return (
-        <div className='shadow-md p-2 rounded-md m-5 items-center justify-center'>
+        <div className='shadow-md p-2 rounded-md m-5 items-center justify-center bg-white'>
             <div className='flex flex-row justify-center p-2 items-center'>
-                <h2>Create a Memory</h2>
+                <h2>{currentId ? 'Edit' : 'Create'} a Memory</h2>
                 <CreateIcon />
             </div>
             <div className='p-2'>
@@ -71,7 +76,7 @@ function Form() {
                     <br></br>
                     <input type="text" className='rounded-md border-[2px] w-full'
                         value={post.tags}
-                        onChange={(e) => { setPost({ ...post, tags: e.target.value }) }}>
+                        onChange={(e) => { setPost({ ...post, tags: e.target.value.split(',') }) }}>
                     </input>
                 </div>
                 <div className='p-1'>
