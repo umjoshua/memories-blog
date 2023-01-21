@@ -3,7 +3,7 @@ import Appbar from './components/Appbar/Appbar'
 import Posts from './components/posts/Posts'
 import Form from './components/Form/Form'
 import { useDispatch } from 'react-redux'
-import { Posts as PostsAction } from './features/posts';
+import { setPosts } from './features/posts';
 import axios from 'axios';
 
 function App() {
@@ -20,10 +20,10 @@ function App() {
   useEffect(() => {
     async function fetchPost() {
       const data = await fetchposts();
-      dispatch(PostsAction(data));
+      dispatch(setPosts(data));
     }
     fetchPost();
-  }, [dispatch,currentId])
+  }, [dispatch, currentId])
 
   return (
     <div className='flex flex-col'>

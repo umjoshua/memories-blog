@@ -3,7 +3,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import FileBase from 'react-file-base64';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { Posts } from '../../features/posts';
+import { setPosts, updatePost } from '../../features/posts';
 import { useSelector } from 'react-redux';
 
 function Form({ currentId, setcurrentId }) {
@@ -22,7 +22,8 @@ function Form({ currentId, setcurrentId }) {
         if (currentId) {
             try {
                 const data = await axios.patch(url + currentId, post).then((response) => response.data);
-                dispatch(Posts(PostData.map((msg)=>(msg._id === currentId ? data: msg))));
+                console.log(data);
+                dispatch(updatePost(data));
             } catch (error) {
                 console.log(error);
             }
@@ -30,9 +31,9 @@ function Form({ currentId, setcurrentId }) {
         else {
             try {
                 const data = await axios.post(url + 'createPost', post).then((response) => response.data);
-                dispatch(Posts([...PostData, data]))
+                dispatch(setPosts([...PostData, data]))
             } catch (error) {
-                console.log(error.message)
+                console.log(error)
             }
         }
     }
