@@ -9,6 +9,11 @@ h2 {
 h3 {
   @apply text-lg;
 }
+
+.long-word {
+  @apply break-words;
+}
+
 @tailwind components;
 @tailwind utilities;
 
