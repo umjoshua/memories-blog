@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { deletePost } from '../../../features/posts';
+import { deletePost, updatePost } from '../../../features/posts';
 
 const url = 'http://localhost:5000/posts/'
 
@@ -18,6 +18,13 @@ function Post({ item, currentId, setcurrentId }) {
     await axios.delete(url + id).then((response) => console.log(response.data));
     dispatch(deletePost(id));
   }
+
+  const handleLike = async (id) => {
+    const data = await axios.patch(url + id + '/likePost').then((response) => response.data);
+    console.log(data);
+    dispatch(updatePost(data));
+  }
+
   return (
     <div className='rounded-md shadow-md h-[400px] w-[300px] flex flex-col justify-between p-2 bg-white m-2'>
       <div className='h-max'>
@@ -47,12 +54,12 @@ function Post({ item, currentId, setcurrentId }) {
         </div>
       </div>
       <div className='flex flex-row items-center justify-between'>
-        <button>
+        <button onClick={() => handleLike(item._id)}>
           <div>
             <FavoriteIcon style={{ color: "red" }} />{item.likeCount}
           </div>
         </button >
-        <button onClick={() => handleDelete(item._id, dispatch)}>
+        <button onClick={() => handleDelete(item._id)}>
           <DeleteForeverIcon />
         </button>
       </div>

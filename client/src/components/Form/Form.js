@@ -40,7 +40,6 @@ function Form({ currentId, setcurrentId }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(post);
         postdata();
         clearSubmit();
     }

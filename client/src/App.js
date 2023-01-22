@@ -21,6 +21,7 @@ function App() {
     async function fetchPost() {
       const data = await fetchposts();
       dispatch(setPosts(data));
+      console.log(data);
     }
     fetchPost();
   }, [dispatch, currentId])
