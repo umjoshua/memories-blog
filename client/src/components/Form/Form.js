@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import CreateIcon from '@mui/icons-material/Create';
 import FileBase from 'react-file-base64';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setPosts, updatePost } from '../../features/posts';
+import { setPosts, updatePost } from '../../redux/posts';
 import { useSelector } from 'react-redux';
+import * as api from '../../api';
 
 function Form({ currentId, setcurrentId }) {
-    const url = "http://localhost:5000/posts/";
 
     const PostData = useSelector((state) => state.post.value);
     const editPost = useSelector((state) => (currentId ? state.post.value.find((message) => message._id === currentId) : null));
@@ -20,21 +19,12 @@ function Form({ currentId, setcurrentId }) {
 
     const postdata = async () => {
         if (currentId) {
-            try {
-                const data = await axios.patch(url + currentId, post).then((response) => response.data);
-                console.log(data);
-                dispatch(updatePost(data));
-            } catch (error) {
-                console.log(error);
-            }
+            const data = api.editPost(currentId, post);
+            dispatch(updatePost(data));
         }
         else {
-            try {
-                const data = await axios.post(url + 'createPost', post).then((response) => response.data);
-                dispatch(setPosts([...PostData, data]))
-            } catch (error) {
-                console.log(error)
-            }
+            const data = await api.createPost(post);
+            dispatch(setPosts([...PostData, data]))
         }
     }
 

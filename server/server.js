@@ -12,7 +12,7 @@ dotenv.config();
 const app = express()
 const PORT = process.env.PORT || 5000;
 
-const MONGODB_URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PWD}@cluster0.zevvmfz.mongodb.net/MernBlogApp?retryWrites=true&w=majority`;
+const MONGODB_URL = process.env.CONNECTION_URL;
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));

@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { deletePost, likePost } from '../../../features/posts';
+import { deletePost, likePost } from '../../../redux/posts';
 
 const url = 'http://localhost:5000/posts/'
 

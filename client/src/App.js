@@ -3,23 +3,18 @@ import Appbar from './components/Appbar/Appbar'
 import Posts from './components/posts/Posts'
 import Form from './components/Form/Form'
 import { useDispatch } from 'react-redux'
-import { setPosts } from './features/posts';
-import axios from 'axios';
+import { setPosts } from './redux/posts';
+// import axios from 'axios';
+import { fetchPosts } from './api'
 
 function App() {
   const [currentId, setcurrentId] = useState(null);
-  const url = "http://localhost:5000/posts";
 
   const dispatch = useDispatch();
 
-  const fetchposts = async () => {
-    const data = await axios.get(url).then((response) => response.data)
-    return data;
-  }
-
   useEffect(() => {
     async function fetchPost() {
-      const data = await fetchposts();
+      const data = await fetchPosts();
       dispatch(setPosts(data));
       console.log(data);
     }
