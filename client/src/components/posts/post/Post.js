@@ -5,7 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { deletePost, updatePost } from '../../../features/posts';
+import { deletePost, likePost } from '../../../features/posts';
 
 const url = 'http://localhost:5000/posts/'
 
@@ -22,7 +22,7 @@ function Post({ item, currentId, setcurrentId }) {
   const handleLike = async (id) => {
     const data = await axios.patch(url + id + '/likePost').then((response) => response.data);
     console.log(data);
-    dispatch(updatePost(data));
+    dispatch(likePost(data));
   }
 
   return (
@@ -46,7 +46,7 @@ function Post({ item, currentId, setcurrentId }) {
           <div className='mt-1 mb-2'>
             <h1>{item.title}</h1>
           </div>
-          <div className='text-[15px] text-gray-500 long-word'>
+          <div className='text-[15px] text-gray-500 long-word overflow-hidden'>
             {item.message}
           </div>
         </div>
