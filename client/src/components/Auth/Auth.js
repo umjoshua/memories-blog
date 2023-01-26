@@ -2,18 +2,21 @@ import React, { useState } from 'react'
 import Input from './Input'
 import PasswordInput from './PasswordInput';
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import { useDispatch, useSelector } from 'react-redux';
+import { authReducer } from '../../redux/auth';
+import jwt_decode from 'jwt-decode';
 
 const Auth = () => {
+    const dispatch = useDispatch();
     const [signup, isSignup] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const googleSuccess = async (res) => {
-        const credential = res?.credential;
-        console.log(res);
-
+        const credential = jwt_decode(res?.credential);
+        dispatch(authReducer(credential));
     }
     const googleError = () => {
-
+        console.log('Error')
     }
 
     return (

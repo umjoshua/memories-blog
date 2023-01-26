@@ -5,10 +5,12 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import postReducer from './redux/posts';
+import { authReducer } from './redux/auth';
 
 const store = configureStore({
   reducer: {
-    post: postReducer
+    post: postReducer,
+    auth: authReducer,
   }
 })
 
