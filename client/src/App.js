@@ -1,38 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react';
 import Appbar from './components/Appbar/Appbar'
-import Posts from './components/posts/Posts'
-import Form from './components/Form/Form'
-import { useDispatch } from 'react-redux'
-import { setPosts } from './redux/posts';
-// import axios from 'axios';
-import { fetchPosts } from './api'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './home/Home';
+import Auth from './components/Auth/Auth';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
-  const [currentId, setcurrentId] = useState(null);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    async function fetchPost() {
-      const data = await fetchPosts();
-      dispatch(setPosts(data));
-      console.log(data);
-    }
-    fetchPost();
-  }, [dispatch, currentId])
-
   return (
-    <div className='flex flex-col'>
-      <Appbar />
-      <div className='flex flex-row justify-evenly'>
-        <div className='mt-[10px]'>
-          <Posts setcurrentId={setcurrentId} currentId={currentId} />
+    <GoogleOAuthProvider clientId="98770873623-s1btqosnvnklca7hadhichj1vk3914s4.apps.googleusercontent.com">
+      <BrowserRouter>
+        <div className='flex flex-col'>
+          <Appbar />
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />} />
+          </Routes>
         </div>
-        <div className='mt-[10px]'>
-          <Form currentId={currentId} setcurrentId={setcurrentId} />
-        </div>
-      </div>
-    </div>
+      </BrowserRouter >
+    </GoogleOAuthProvider>
   )
 }
 
