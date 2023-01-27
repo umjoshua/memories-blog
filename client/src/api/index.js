@@ -1,21 +1,55 @@
 import axios from 'axios';
 
-const url = "http://localhost:5000/posts/";
+const baseURL = "http://localhost:5000";
+
+const API = axios.create({ baseURL })
+
+const token = JSON.parse(localStorage.getItem('profile'));
+const config = {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    }
+};
+
 
 export const fetchPosts = async () => {
-    return await axios.get(url).then((response) => response.data);
+    return await API.get('/posts').then((response) => response.data);
 };
 
 export const editPost = async (id, post) => {
     try {
-        return await axios.patch(url + id, post).then((response) => response.data);
+        return await API.patch('/posts' + id, post, config).then((response) => response.data);
     } catch (error) {
     }
 }
 
 export const createPost = async (post) => {
     try {
-        return await axios.post(url + 'createPost', post).then((response) => response.data);
+        return await API.post('/posts/createPost', post, config).then((response) => response.data);
     } catch (error) {
+    }
+}
+
+export const likePost = async (id) => {
+    try {
+        return await API.patch('/posts/' + id + '/likePost', { data: null }, config).then((response) => response.data);
+    } catch (error) {
+    }
+}
+
+export const deletePost = async (id) => {
+    try {
+        await API.delete('/posts/' + id, config);
+    } catch (error) {
+
+    }
+}
+
+export const signUp = async (formData) => {
+    try {
+        return await API.post('/login/signup', formData).then((response) => response.data);
+    } catch (error) {
+
     }
 }

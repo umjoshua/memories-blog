@@ -6,21 +6,18 @@ import moment from 'moment';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost } from '../../../redux/posts';
-
-const url = 'http://localhost:5000/posts/'
-
-
+import * as api from '../../../api';
 
 function Post({ item, currentId, setcurrentId }) {
   const dispatch = useDispatch();
 
   const handleDelete = async (id) => {
-    await axios.delete(url + id).then((response) => console.log(response.data));
+    api.deletePost(id);
     dispatch(deletePost(id));
   }
 
   const handleLike = async (id) => {
-    const data = await axios.patch(url + id + '/likePost').then((response) => response.data);
+    const data = api.likePost(id);
     console.log(data);
     dispatch(likePost(data));
   }

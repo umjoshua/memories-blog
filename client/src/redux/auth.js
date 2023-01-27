@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const authSlice = createSlice({
     name: 'auth',
-    initialState: { value: null },
+    initialState: { value: JSON.parse(localStorage.getItem('profile')) },
     reducers: {
         authReducer: (state, action) => {
             localStorage.setItem('profile', JSON.stringify(action.payload))

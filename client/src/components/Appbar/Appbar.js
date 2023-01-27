@@ -1,17 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import memories from '../../images/memories.png'
 import Search from '../Search/Search'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutReducer } from '../../redux/auth'
+import jwt_decode from 'jwt-decode';
 
 function Appbar() {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.auth.value);
+  const token = useSelector(state => state.auth.value);
+  let user = null;
+  if (token) {
+    user = jwt_decode(token)
+  }
 
   const logout = () => {
     dispatch(logoutReducer());
   }
+
+  console.log(JSON.parse(localStorage.getItem('profile')))
 
   return (
     <div className='h-[60px] flex flex-row shadow-md items-center justify-between p-5 bg-white relative'>
@@ -27,7 +34,7 @@ function Appbar() {
               <img className='flex justify-center rounded-[50%] h-[30px] w-[30px] bg-gray-100 items-center' src={user.picture} alt={user.name.charAt(0)}></img>
               <p className='p-1'>{user.name}</p>
               <button className='bg-red-500 mx-1 p-1 rounded-md text-white'
-                onClick={logout}>
+                onClick={() => logout()}>
                 Log Out
               </button>
             </div>

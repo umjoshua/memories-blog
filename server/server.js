@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 
 //Routes
 import PostRoutes from './routes/Posts.js';
+import UserRoutes from './routes/User.js';
 
 dotenv.config();
 
@@ -16,16 +17,17 @@ const MONGODB_URL = process.env.CONNECTION_URL;
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended:true }));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors())
 
-app.use('/posts',PostRoutes);
+app.use('/posts', PostRoutes);
+app.use('/login', UserRoutes)
 
-mongoose.set('strictQuery',true);
-mongoose.connect(MONGODB_URL,{useNewUrlParser: true}).then(()=>{
-    app.listen(PORT, ()=>{
+mongoose.set('strictQuery', true);
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
+    app.listen(PORT, () => {
         console.log("Listening")
     })
-}).catch((e)=>{
+}).catch((e) => {
     console.log(e.message)
 })
