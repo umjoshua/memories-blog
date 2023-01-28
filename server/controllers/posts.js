@@ -12,8 +12,8 @@ export const getPosts = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-
     const body = req.body;
+    body.creator = req.userId;
     const newPost = new PostMessage(body)
 
     try {
@@ -26,11 +26,17 @@ export const createPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
     const { id } = req.params;
+    const post = await PostMessage.findById(id);
+
+    if (post._id != id) {
+        return res.status(409).send('Unauthorized access');
+    }
     const { title, message, creator, tags, file } = req.body;
 
+    const userId = req.userId;
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with this id');
 
-    const updatedPost = { title, message, creator, tags, file, _id: id };
+    const updatedPost = { creator: userId, title, message, creator, tags, file, _id: id };
     await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
 
     res.json(updatedPost);
@@ -38,6 +44,11 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
     const { id } = req.params;
+
+    const post = await PostMessage.findById(id);
+    if (post._id != id) {
+        return res.status(409).send('Unauthorized access');
+    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with this id');
 

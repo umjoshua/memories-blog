@@ -4,22 +4,24 @@ import Search from '../Search/Search'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logoutReducer } from '../../redux/auth'
-import jwt_decode from 'jwt-decode';
+import decode from 'jwt-decode';
 
 function Appbar() {
   const dispatch = useDispatch();
   const profile = useSelector(state => state.auth.value);
-  console.log(profile);
   let user = null;
   if (profile) {
-    user = profile.result;
+    user = profile?.result;
+    let decoded = decode(profile?.token);
+    
+    if (decoded?.exp * 1000 < new Date().getTime()) {
+      dispatch(logoutReducer());
+    }
   }
 
   const logout = () => {
     dispatch(logoutReducer());
   }
-
-  console.log(JSON.parse(localStorage.getItem('profile')))
 
   return (
     <div className='h-[60px] flex flex-row shadow-md items-center justify-between p-5 bg-white relative'>

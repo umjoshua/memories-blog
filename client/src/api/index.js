@@ -19,7 +19,7 @@ export const fetchPosts = async () => {
 
 export const editPost = async (id, post) => {
     try {
-        return await API.patch('/posts' + id, post, config).then((response) => response.data);
+        return await API.patch('/posts/' + id, post, config).then((response) => response.data);
     } catch (error) {
     }
 }
@@ -48,7 +48,7 @@ export const deletePost = async (id) => {
 
 export const signUp = async (formData) => {
     try {
-        return await API.post('/login/signup', formData).then((response) => response.data);
+        return await API.post('/login/signup', formData).then((response) => response.data).catch((error) => error.response);
     } catch (error) {
 
     }
@@ -56,7 +56,7 @@ export const signUp = async (formData) => {
 
 export const signIn = async (formData) => {
     try {
-        return await API.post('/login/signin', formData).then((response) => response.data);
+        return await API.post('/login/signin', formData).then((response) => response.data).catch((error) => error.response);
     } catch (error) {
 
     }

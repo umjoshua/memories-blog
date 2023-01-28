@@ -11,6 +11,7 @@ const Auth = () => {
     const navigate = useNavigate();
     const [signup, isSignup] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [warning, setWarning] = useState(false);
 
     const [formData, setFormData] = useState({
         fname: '',
@@ -24,13 +25,21 @@ const Auth = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (signup) {
+            setWarning(false);
             const result = await api.signUp(formData);
-            console.log(result);
+            if (result?.status >= 400 && result?.status < 500) {
+                setWarning("Couldn't create user!");
+                return;
+            }
             dispatch(authReducer(result));
             navigate('/');
         } else {
+            setWarning(false);
             const result = await api.signIn(formData);
-            console.log(result);
+            if (result?.status >= 400 && result?.status < 500) {
+                setWarning('Username or password incorrect!');
+                return;
+            }
             dispatch(authReducer(result));
             navigate('/');
         }
@@ -70,6 +79,9 @@ const Auth = () => {
                         />
                     }
 
+                    <div className='text-red-700'>
+                        {warning}
+                    </div>
                     <button className='text-white bg-teal-700 p-2 rounded-md w-full my-2' type='submit'>
                         {signup ? 'Sign Up' : 'Sign In'}
                     </button>
@@ -79,7 +91,6 @@ const Auth = () => {
                         <button className='w-full' onClick={(e) => { e.preventDefault(); isSignup(!signup) }}>
                             {signup ? 'Log In' : 'Create One'}
                         </button>
-
                     </div>
                 </form>
             </div>

@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux';
 import { setPosts, updatePost } from '../../redux/posts';
 import { useSelector } from 'react-redux';
 import * as api from '../../api';
+import { useLocation } from 'react-router-dom';
 
 function Form({ currentId, setcurrentId }) {
-
+    let user = JSON.parse(localStorage.getItem('profile'))?.result;
     const PostData = useSelector((state) => state.post.value);
     const editPost = useSelector((state) => (currentId ? state.post.value.find((message) => message._id === currentId) : null));
-    const [post, setPost] = useState({ creator: '', title: '', message: '', tags: '', file: '' });
+    const [post, setPost] = useState({ title: '', message: '', tags: '', file: '' });
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -19,11 +20,11 @@ function Form({ currentId, setcurrentId }) {
 
     const postdata = async () => {
         if (currentId) {
-            const data = api.editPost(currentId, post);
+            const data = await api.editPost(currentId, { ...post, name: user.name });
             dispatch(updatePost(data));
         }
         else {
-            const data = await api.createPost(post);
+            const data = await api.createPost({ ...post, name: user.name });
             dispatch(setPosts([...PostData, data]))
         }
     }
@@ -35,9 +36,18 @@ function Form({ currentId, setcurrentId }) {
     }
 
     const clearSubmit = () => {
-        setPost({ creator: '', title: '', message: '', tags: '', file: '' })
+        setPost({ title: '', message: '', tags: '', file: '' })
         setcurrentId(null);
     }
+
+    if (!user) {
+        return (
+            <div className='flex shadow-md p-2 rounded-md m-5 items-center justify-center bg-white w-[200px] h-[100px]'>
+                <h2 className='text-center'>Please login to create your own memories</h2>
+            </div>
+        )
+    }
+
 
     return (
         <div className='shadow-md p-2 rounded-md m-5 items-center justify-center bg-white'>
@@ -46,14 +56,6 @@ function Form({ currentId, setcurrentId }) {
                 <CreateIcon />
             </div>
             <div className='p-2'>
-                <div className='p-1'>
-                    <span>Creator: </span>
-                    <br></br>
-                    <input type="text" className='rounded-md border-[2px] w-full'
-                        value={post.creator}
-                        onChange={(e) => { setPost({ ...post, creator: e.target.value }) }}>
-                    </input>
-                </div>
                 <div className='p-1'>
                     <span>Title: </span>
                     <br></br>

@@ -3,12 +3,14 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deletePost, likePost } from '../../../redux/posts';
 import * as api from '../../../api';
 
-function Post({ item, currentId, setcurrentId }) {
+function Post({ item, setcurrentId }) {
+
+  let user = useSelector((state) => state.auth.value);
+
   const dispatch = useDispatch();
 
   const handleDelete = async (id) => {
@@ -18,7 +20,6 @@ function Post({ item, currentId, setcurrentId }) {
 
   const handleLike = async (id) => {
     const data = await api.likePost(id);
-    console.log(data);
     dispatch(likePost(data));
   }
 
@@ -27,14 +28,14 @@ function Post({ item, currentId, setcurrentId }) {
       <div className='h-max'>
         <div className='h-[160px] rounded-tr-md rounded-tl-md flex flex-row justify-between p-3'
           style={{ backgroundImage: `url(${item.file})`, backgroundSize: 'cover' }}>
-          <div className='text-white'>{item.creator}<br />
+          <div className='text-white'>{item.name}<br />
             <span className='text-[10px]'>{moment(item.createdAt).fromNow()}</span>
           </div>
-          <div>
+          {user?._id == item.creator && <div>
             <button onClick={() => setcurrentId(item._id)}>
               <EditIcon style={{ color: 'white' }} />
             </button>
-          </div>
+          </div>}
         </div>
         <div className='text-[15px] text-gray-500'>
           {item.tags.map((tag) => `#${tag} `)}
@@ -53,12 +54,12 @@ function Post({ item, currentId, setcurrentId }) {
       <div className='flex flex-row items-center justify-between'>
         <button onClick={() => handleLike(item._id)}>
           <div>
-            <FavoriteIcon style={{ color: "red" }} />{item.likes.length}
+            <FavoriteIcon style={{ color: "red" }} />{item.likes?.length}
           </div>
         </button >
-        <button onClick={() => handleDelete(item._id)}>
+        {user?._id == item.creator && <button onClick={() => handleDelete(item._id)}>
           <DeleteForeverIcon />
-        </button>
+        </button>}
       </div>
     </div >
   )

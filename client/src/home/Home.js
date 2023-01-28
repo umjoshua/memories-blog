@@ -13,7 +13,6 @@ const Home = () => {
         async function fetchPost() {
             const data = await fetchPosts();
             dispatch(setPosts(data));
-            console.log(data);
         }
         fetchPost();
     }, [dispatch, currentId])
