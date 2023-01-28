@@ -4,7 +4,7 @@ const baseURL = "http://localhost:5000";
 
 const API = axios.create({ baseURL })
 
-const token = JSON.parse(localStorage.getItem('profile'));
+let token = JSON.parse(localStorage.getItem('profile'))?.token;
 const config = {
     headers: {
         'Content-Type': 'application/json',
@@ -49,6 +49,14 @@ export const deletePost = async (id) => {
 export const signUp = async (formData) => {
     try {
         return await API.post('/login/signup', formData).then((response) => response.data);
+    } catch (error) {
+
+    }
+}
+
+export const signIn = async (formData) => {
+    try {
+        return await API.post('/login/signin', formData).then((response) => response.data);
     } catch (error) {
 
     }

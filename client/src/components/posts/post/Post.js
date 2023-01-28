@@ -17,7 +17,7 @@ function Post({ item, currentId, setcurrentId }) {
   }
 
   const handleLike = async (id) => {
-    const data = api.likePost(id);
+    const data = await api.likePost(id);
     console.log(data);
     dispatch(likePost(data));
   }
@@ -53,7 +53,7 @@ function Post({ item, currentId, setcurrentId }) {
       <div className='flex flex-row items-center justify-between'>
         <button onClick={() => handleLike(item._id)}>
           <div>
-            <FavoriteIcon style={{ color: "red" }} />{item.likeCount}
+            <FavoriteIcon style={{ color: "red" }} />{item.likes.length}
           </div>
         </button >
         <button onClick={() => handleDelete(item._id)}>

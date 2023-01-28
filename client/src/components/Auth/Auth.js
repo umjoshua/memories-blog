@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Input from './Input'
 import PasswordInput from './PasswordInput';
-import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { useDispatch } from 'react-redux';
 import { authReducer } from '../../redux/auth';
 import { useNavigate } from 'react-router-dom';
@@ -21,19 +20,20 @@ const Auth = () => {
         repeatPassword: ''
     });
 
-    const googleSuccess = async (res) => {
-        const credential = res?.credential;
-        dispatch(authReducer(credential));
-        navigate('/');
-    }
-    const googleError = () => {
-        console.log('Error')
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await api.signUp(formData);
-        console.log(result);
+        if (signup) {
+            const result = await api.signUp(formData);
+            console.log(result);
+            dispatch(authReducer(result));
+            navigate('/');
+        } else {
+            const result = await api.signIn(formData);
+            console.log(result);
+            dispatch(authReducer(result));
+            navigate('/');
+        }
     }
 
     const handleChange = (e) => {
@@ -76,16 +76,10 @@ const Auth = () => {
 
                     <div className='flex flex-col items-center p-2'>
                         <p className='italic text-sm'>{signup ? "Have an account?" : "Don't have an account?"}</p>
-                        <button className='w-full' onClick={() => isSignup(!signup)}>
+                        <button className='w-full' onClick={(e) => { e.preventDefault(); isSignup(!signup) }}>
                             {signup ? 'Log In' : 'Create One'}
                         </button>
 
-                    </div>
-                    <div className='p-2'>
-                        <GoogleLogin
-                            onSuccess={googleSuccess}
-                            onError={googleError}
-                        />
                     </div>
                 </form>
             </div>

@@ -8,10 +8,11 @@ import jwt_decode from 'jwt-decode';
 
 function Appbar() {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.auth.value);
+  const profile = useSelector(state => state.auth.value);
+  console.log(profile);
   let user = null;
-  if (token) {
-    user = jwt_decode(token)
+  if (profile) {
+    user = profile.result;
   }
 
   const logout = () => {
