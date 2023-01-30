@@ -9,18 +9,27 @@ import * as api from '../../../api';
 
 function Post({ item, setcurrentId }) {
 
-  let user = useSelector((state) => state.auth.value)?.result;
+  let profile = useSelector((state) => state.auth.value);
+  let user = profile?.result;
+  let token = profile?.token;
+  
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  };
 
   const dispatch = useDispatch();
 
   const handleDelete = async (id) => {
-    const result = await api.deletePost(id);
+    const result = await api.deletePost(id,config);
     if (result?.status === 200) dispatch(deletePost(id));
   }
 
   const handleLike = async (id) => {
-    const result = await api.likePost(id);
-    if(result?.status === 200) dispatch(likePost(result?.data));
+    const result = await api.likePost(id,config);
+    if (result?.status === 200) dispatch(likePost(result?.data));
   }
 
   return (
@@ -31,7 +40,7 @@ function Post({ item, setcurrentId }) {
           <div className='text-white'>{item.name}<br />
             <span className='text-[10px]'>{moment(item.createdAt).fromNow()}</span>
           </div>
-          {user?._id == item.creator && <div>
+          {user?._id === item.creator && <div>
             <button onClick={() => setcurrentId(item._id)}>
               <EditIcon style={{ color: 'white' }} />
             </button>
@@ -57,7 +66,7 @@ function Post({ item, setcurrentId }) {
             <FavoriteIcon style={{ color: "red" }} />{item.likes?.length}
           </div>
         </button >
-        {user?._id == item.creator && <button onClick={() => handleDelete(item._id)}>
+        {user?._id === item.creator && <button onClick={() => handleDelete(item._id)}>
           <DeleteForeverIcon />
         </button>}
       </div>

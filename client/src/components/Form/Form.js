@@ -5,10 +5,20 @@ import { useDispatch } from 'react-redux';
 import { setPosts, updatePost } from '../../redux/posts';
 import { useSelector } from 'react-redux';
 import * as api from '../../api';
-import { useLocation } from 'react-router-dom';
 
 function Form({ currentId, setcurrentId }) {
-    let user = JSON.parse(localStorage.getItem('profile'))?.result;
+    let profile = useSelector((state)=>state.auth.value);
+    let token = profile?.token;
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    let user = profile?.result;
+    
     const PostData = useSelector((state) => state.post.value);
     const editPost = useSelector((state) => (currentId ? state.post.value.find((message) => message._id === currentId) : null));
     const [post, setPost] = useState({ title: '', message: '', tags: '', file: '' });
@@ -20,13 +30,13 @@ function Form({ currentId, setcurrentId }) {
 
     const postdata = async () => {
         if (currentId) {
-            const { data } = await api.editPost(currentId, { ...post, name: user.name });
+            const { data } = await api.editPost(currentId, { ...post, name: user.name }, config);
             if (data) {
                 dispatch(updatePost(data));
             }
         }
         else {
-            const { data } = await api.createPost({ ...post, name: user.name });
+            const { data } = await api.createPost({ ...post, name: user.name }, config);
             if (data) {
                 dispatch(setPosts([...PostData, data]))
             }

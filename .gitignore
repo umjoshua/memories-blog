@@ -12,7 +12,6 @@ node_modules/
 build/
 
 # Environment variables
-.env
 
 # Local environment files
 .env.local
