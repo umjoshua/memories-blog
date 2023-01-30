@@ -31,16 +31,17 @@ const Auth = () => {
                 setWarning("Couldn't create user!");
                 return;
             }
-            dispatch(authReducer(result));
+            dispatch(authReducer(result?.data));
             navigate('/');
         } else {
             setWarning(false);
             const result = await api.signIn(formData);
+            console.log(result);
             if (result?.status >= 400 && result?.status < 500) {
                 setWarning('Username or password incorrect!');
                 return;
             }
-            dispatch(authReducer(result));
+            dispatch(authReducer(result?.data));
             navigate('/');
         }
     }

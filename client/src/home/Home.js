@@ -11,8 +11,10 @@ const Home = () => {
 
     useEffect(() => {
         async function fetchPost() {
-            const data = await fetchPosts();
-            dispatch(setPosts(data));
+            const { data } = await fetchPosts();
+            if (data) {
+                dispatch(setPosts(data));
+            }
         }
         fetchPost();
     }, [dispatch, currentId])

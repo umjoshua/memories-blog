@@ -9,18 +9,18 @@ import * as api from '../../../api';
 
 function Post({ item, setcurrentId }) {
 
-  let user = useSelector((state) => state.auth.value);
+  let user = useSelector((state) => state.auth.value)?.result;
 
   const dispatch = useDispatch();
 
   const handleDelete = async (id) => {
-    api.deletePost(id);
-    dispatch(deletePost(id));
+    const result = await api.deletePost(id);
+    if (result?.status === 200) dispatch(deletePost(id));
   }
 
   const handleLike = async (id) => {
-    const data = await api.likePost(id);
-    dispatch(likePost(data));
+    const result = await api.likePost(id);
+    if(result?.status === 200) dispatch(likePost(result?.data));
   }
 
   return (

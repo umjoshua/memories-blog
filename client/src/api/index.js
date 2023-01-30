@@ -13,51 +13,16 @@ const config = {
 };
 
 
-export const fetchPosts = async () => {
-    return await API.get('/posts').then((response) => response.data);
-};
+export const fetchPosts = async () => await API.get('/posts');
 
-export const editPost = async (id, post) => {
-    try {
-        return await API.patch('/posts/' + id, post, config).then((response) => response.data);
-    } catch (error) {
-    }
-}
+export const editPost = async (id, post) => await API.patch('/posts/' + id, post, config);
 
-export const createPost = async (post) => {
-    try {
-        return await API.post('/posts/createPost', post, config).then((response) => response.data);
-    } catch (error) {
-    }
-}
+export const createPost = async (post) => await API.post('/posts/createPost', post, config);
 
-export const likePost = async (id) => {
-    try {
-        return await API.patch('/posts/' + id + '/likePost', { data: null }, config).then((response) => response.data);
-    } catch (error) {
-    }
-}
+export const likePost = async (id) => await API.patch('/posts/' + id + '/likePost', { data: null }, config);
 
-export const deletePost = async (id) => {
-    try {
-        await API.delete('/posts/' + id, config);
-    } catch (error) {
+export const deletePost = async (id) => await API.delete('/posts/' + id, config);
 
-    }
-}
+export const signUp = async (formData) => API.post('/login/signup', formData);
 
-export const signUp = async (formData) => {
-    try {
-        return await API.post('/login/signup', formData).then((response) => response.data).catch((error) => error.response);
-    } catch (error) {
-
-    }
-}
-
-export const signIn = async (formData) => {
-    try {
-        return await API.post('/login/signin', formData).then((response) => response.data).catch((error) => error.response);
-    } catch (error) {
-
-    }
-}
+export const signIn = async (formData) => await API.post('/login/signin', formData);

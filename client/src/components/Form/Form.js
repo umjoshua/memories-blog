@@ -20,12 +20,16 @@ function Form({ currentId, setcurrentId }) {
 
     const postdata = async () => {
         if (currentId) {
-            const data = await api.editPost(currentId, { ...post, name: user.name });
-            dispatch(updatePost(data));
+            const { data } = await api.editPost(currentId, { ...post, name: user.name });
+            if (data) {
+                dispatch(updatePost(data));
+            }
         }
         else {
-            const data = await api.createPost({ ...post, name: user.name });
-            dispatch(setPosts([...PostData, data]))
+            const { data } = await api.createPost({ ...post, name: user.name });
+            if (data) {
+                dispatch(setPosts([...PostData, data]))
+            }
         }
     }
 
